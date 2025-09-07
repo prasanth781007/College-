@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semester I Subjects - B.E. ECE Curriculum</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Basic Reset & Body Styling */
+    body {
+      font-family: "Roboto", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7f6;
+      color: #333;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Go to Home Button */
+    #goHomeBtn {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease;
+    }
+    #goHomeBtn:hover {
+      background-color: #16a085;
+    }
+
+    /* Header */
+    header {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      position: relative;
+      margin-top: 50px; /* To avoid overlap with fixed button */
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    /* Main Content Area */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button */
+    .btn {
+      background-color: #1abc9c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #16a085;
+    }
+
+    /* Subject List */
+    .subject-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .subject-list li {
+      background-color: #e8f6f3;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .subject-list li:hover {
+      background-color: #d4edda;
+      transform: translateY(-3px);
+    }
+
+    .subject-list li .arrow {
+      font-size: 1.2em;
+      transition: transform 0.3s ease;
+    }
+
+    .subject-list li.active .arrow {
+      transform: rotate(90deg);
+    }
+
+    .subject-detail {
+      display: none;
+      padding: 20px;
+      border: 1px solid #b3e0ff;
+      background-color: #e6f7ff;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .subject-detail h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #1abc9c;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+
+    .subject-detail h3 {
+      color: #2980b9;
+      border-bottom: 1px solid #a0d9ff;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+
+    .subject-detail p {
+      margin-bottom: 10px;
+    }
+
+    .subject-detail ul {
+      list-style: disc;
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .subject-detail .chapter-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .subject-detail .chapter-list li {
+      background-color: #f0f8ff;
+      border-left: 3px solid #3498db;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-weight: normal;
+    }
+
+    .subject-detail .chapter-content {
+      display: none;
+      padding: 10px 0 0 15px;
+      border-top: 1px dashed #ccc;
+      margin-top: 5px;
+    }
+
+    .subject-detail .resources ul,
+    .subject-detail .practicals ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .subject-detail .resources li,
+    .subject-detail .practicals li {
+      background-color: #f9f9f9;
+      margin-bottom: 5px;
+      padding: 8px;
+      border-left: 3px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+
+    .subject-detail .resources li a,
+    .subject-detail .practicals li a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+
+    .subject-detail .resources li a:hover,
+    .subject-detail .practicals li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subject-detail {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 0.9em;
+      margin-top: 40px;
+      border-top: 3px solid #1abc9c;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+      .container {
+        margin: 20px 10px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Go to Home Button -->
+  <button id="goHomeBtn" onclick="index.html"><a href="index.html">Go to Home</a></button>
+
+  <header>
+    <h1>B.E. Electronics and Communication Engineering</h1>
+    <p>Regulations: 2025 - Semester I Subject Details</p>
+  </header>
+
+  <div class="container">
+    <button class="btn" onclick="showAbout()">About This Page</button>
+    <h2>Semester I Subjects</h2>
+    <div class="subject-list">
+      <ul>
+        <li onclick="showSubjectDetail('MA25C01')">MA25C01 - Applied Calculus <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('EN25C01')">EN25C01 - English Essentials – I <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('UC25H01')">UC25H01 - Heritage of Tamils <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('EE25C04')">EE25C04 - Basic Electronics and Electrical Engineering <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('PH25C01')">PH25C01 - Applied Physics - I <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('CY25C01')">CY25C01 - Applied Chemistry - I <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('CS25C01')">CS25C01 - Computer Programming: C <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('ME25C04')">ME25C04 - Maker space <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('UC25A01')">UC25A01 - Life Skills for Engineers – I* <span class="arrow">></span></li>
+        <li onclick="showSubjectDetail('UC25A02')">UC25A02 - Physical Education – I* <span class="arrow">></span></li>
+      </ul>
+    </div>
+
+    <!-- Subject Detail View Area (Initially hidden) -->
+    <div id="subject-detail-view" class="subject-detail"></div>
+  </div>
+
+  <footer>
+    <p>© 2024 Anna University, Chennai - Department of Electronics and Communication Engineering</p>
+    <p>Contact: info@annauniv.edu | Phone: +91-44-22357000</p>
+  </footer>
+
+  <script>
+    // Scroll to top function for "Go to Home" button
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Function to show About information
+    function showAbout() {
+      const subjectDetailView = document.getElementById("subject-detail-view");
+      subjectDetailView.innerHTML = `
+                <h2>About This Page</h2>
+                <p>This webpage provides detailed information on all subjects from Semester I of the B.E. Electronics and Communication Engineering curriculum under Regulations 2025, as per Anna University.</p>
+                <p>Click on any subject from the list above to view its full details, including course objectives, syllabus, chapter resources, and lab practicals.</p>
+                <p>The syllabus is designed to equip students with foundational knowledge in various engineering disciplines.</p>
+                <h3>Navigation Tips:</h3>
+                <ul>
+                    <li>Use the "About This Page" button to view this information.</li>
+                    <li>Click on subject titles to expand/collapse their details.</li>
+                    <li>Resources include links to e-books, tutorials, and videos.</li>
+                </ul>
+                <p>For more information, contact the Department of Electronics and Communication Engineering at Anna University, Chennai.</p>
+            `;
+      subjectDetailView.style.display = "block";
+      subjectDetailView.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Data structure to hold all subject details for Semester I
+    const subjectData = {
+      'MA25C01': {
+          name: 'Applied Calculus',
+          type: 'Theory (T)',
+          periods: '3-1-0',
+          credits: '4',
+          category: 'Basic Science (BS)',
+          objectives: [
+              'To provide technical competence of modelling engineering problems using calculus.',
+              'To apply the calculus concepts in solving engineering problems using analytical methods and computational tools.'
+          ],
+          chapters: [
+              {
+                  title: 'Differential Calculus',
+                  topics: 'Functions, graph of functions, New functions from old functions, Limit of a function, Continuity, Limits at infinity, Derivative as a function, Maxima and Minima of functions of single variable, Mean value theorem, Effect of derivatives on the shape of a graph.',
+                  activities: 'Visualization of the functions, Maxima and Minima of a function using open-source software, Solving of Competitive Examination questions (Ex. GATE).'
+              },
+              {
+                  title: 'Functions of Several Variables',
+                  topics: 'Partial derivatives, Chain rule, Total derivative, Maxima and minima of functions of two variables, Method of Lagrange’s Multipliers, Application problems in engineering.',
+                  activities: 'Partial Derivatives with two or three variables, Maxima and Minima of a function using open-source software, Solving of Competitive Examination questions (Ex. GATE).'
+              },
+              {
+                  title: 'Integral Calculus',
+                  topics: 'Fundamental theorem of Calculus, Indefinite integrals and the Net Change Theorem, Improper integrals, Arc Length, Area of Region, Area of surface of revolution.',
+                  activities: 'Definite and Indefinite Integrals, Determination of Area, Solving of Competitive Examination questions (Ex. GATE).'
+              },
+              {
+                  title: 'Multiple Integrals',
+                  topics: 'Iterated integrals and Fubini’s theorem, Evaluation of double integrals, change of order of integration, change of variables between Cartesian and polar co-ordinates, evaluation of triple integrals - change of variables between Cartesian and cylindrical and spherical co-ordinates.',
+                  activities: 'Double integrals and triple integrals using open-source software, Solving of Competitive Examination questions (Ex. GATE).'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Calculus: Early Transcendentals (E-book)', link: 'https://math.libretexts.org/Bookshelves/Calculus/Map%3A_Calculus__Early_Transcendentals_(Stewart)/' },
+              { icon: '&#128218;', text: 'OpenStax Calculus Volume 1 (E-book)', link: 'https://openstax.org/books/calculus-volume-1/' },
+              { icon: '&#128203;', text: 'Lamar University Calculus II Tutorials (Online Resource)', link: 'https://tutorial.math.lamar.edu/Classes/CalcII/CalcII.aspx' },
+              { icon: '&#128187;', text: 'SCILAB (Open-source Software for Numerical Computation)', link: 'https://www.scilab.org/' },
+              { icon: '&#128249;', text: 'Differential Calculus Video Lectures (YouTube Search)', link: 'https://www.youtube.com/results?search_query=differential+calculus+engineering' },
+              { icon: '&#128249;', text: 'Multiple Integrals Applications (YouTube Search)', link: 'https://www.youtube.com/results?search_query=multiple+integrals+applications' }
+          ],
+          practicals: [
+              'Visualization of functions using open-source software (e.g., GeoGebra, Desmos).',
+              'Solving maxima and minima problems using open-source software.',
+              'Exercises on partial derivatives with two or three variables.',
+              'Determination of Area using definite and indefinite integrals.',
+              'Evaluation of double and triple integrals using open-source software.',
+              'Solving GATE (Graduate Aptitude Test in Engineering) questions related to calculus concepts.'
+          ]
+      },
+      'EN25C01': {
+          name: 'English Essentials – I',
+          type: 'Theory (T)',
+          periods: '2-0-0',
+          credits: '2',
+          category: 'Humanities (HUM)',
+          objectives: [
+              'To equip students with the skills to write clear, coherent, and grammatically correct texts for various purposes.',
+              'To strengthen the ability to comprehend, interpret, and analyse written English across diverse contexts.'
+          ],
+          chapters: [
+              {
+                  title: 'Speaking Skills',
+                  topics: 'Parts of Speech, Articles, Tenses, Sentence Structure, Types of Sentences, Subject-Verb Agreement, Synonyms and Antonyms, Prefixes and Suffixes, Idioms and Phrases, Self-Introduction, Expressing Oneself, Everyday Conversations, Team Interactions, Emotions, agreeing & disagreeing',
+                  activities: 'Self-Introduction, Just a Minute (JAM) Video recording, Brainstorming sessions, Situational role plays, Usage of Applications.'
+              },
+              {
+                  title: 'Listening Skills',
+                  topics: 'Listening to Simple Conversations, Short Speeches / Stories, Extracting key information, Phonemes, Listening to Native Speakers, Listening to Various Accents.',
+                  activities: 'Gap fill exercises, Understanding tone and intent, Listening and imitating, Spell Bee'
+              },
+              {
+                  title: 'Reading Skills',
+                  topics: 'Reading Strategies, Skimming and Scanning, active reading with short passages.',
+                  activities: 'Summarising, loud reading, Cloze reading, Reading comprehension, Reading newspaper articles, Reading Long passage and note making.'
+              },
+              {
+                  title: 'Drafting Skills',
+                  topics: 'Sentence Formation, Word Substitution, Keywords Development, Writing Paragraphs, Emails and Letters.',
+                  activities: 'Picture and poster interpretation, formal and informal letters, Official e-mails.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Business and Professional Communication: KEYS for Workplace Excellence', link: 'https://www.amazon.com/Business-Professional-Communication-Workplace-Excellence/dp/154439696X' },
+              { icon: '&#128203;', text: 'Cambridge English – Grammar and Vocabulary', link: 'https://www.cambridgeenglish.org/learning-english/grammar-and-vocabulary/' },
+              { icon: '&#128203;', text: 'British Council – Learn English', link: 'https://learnenglish.britishcouncil.org/grammar' },
+              { icon: '&#128249;', text: 'TED Talks', link: 'https://www.ted.com/' }
+          ],
+          practicals: [
+              'Role-playing various communication scenarios.',
+              'Preparing and delivering short presentations.',
+              'Writing formal and informal emails.',
+              'Participating in group discussions and debates.'
+          ]
+      },
+      'UC25H01': {
+          name: 'Heritage of Tamils',
+          type: 'Theory (T)',
+          periods: '1-0-0',
+          credits: '1',
+          category: 'Humanities (HUM)',
+          objectives: [
+              'To understand the rich cultural heritage of Tamils.',
+              'To explore the language, literature, arts, and contributions of Tamils.'
+          ],
+          chapters: [
+              {
+                  title: 'Language and Literature',
+                  topics: 'Indian Language Families, Dravidian Languages, Tamil as a Classical Language, Classical Literature in Tamil, Secular Nature of Sangam Literature, Distributive Justice in Sangam Literature, Management Principles in Thirukural, Tamil Epics and Impact of Buddhism & Jainism in Tamil Land, Bakthi Literature Azhwars and Nayanmars, Forms of minor Poetry, Development of Modern literature in Tamil, Contribution of Bharathiyar and Bharathidhasan.',
+                  activities: 'Discussions on literary works, analysis of historical texts.'
+              },
+              {
+                  title: 'Heritage - Rock Art Paintings to Modern Art – Sculpture',
+                  topics: 'Hero stone to modern sculpture, Bronze icons, Tribes and their handicrafts, Art of temple car making, Massive Terracotta sculptures, Village deities, Thiruvalluvar Statue at Kanyakumari, Making of musical instruments (Mridhangam, Parai, Veenai, Yazh and Nadhaswaram), Role of Temples in Social and Economic Life of Tamils.',
+                  activities: 'Virtual tours of historical sites, study of traditional crafts.'
+              },
+              {
+                  title: 'Folk and Martial Arts',
+                  topics: 'Therukoothu, Karagattam, Villu Pattu, Kaniyan Koothu, Oyillattam, Leather puppetry, Silambattam, Valari, Tiger dance, Sports and Games of Tamils.',
+                  activities: 'Video demonstrations of folk arts, discussions on martial traditions.'
+              },
+              {
+                  title: 'Thinai Concept of Tamils',
+                  topics: 'Flora and Fauna of Tamils & Aham and Puram Concept from Tholkappiyam and Sangam Literature, Aram Concept of Tamils, Education and Literacy during Sangam Age, Ancient Cities and Ports of Sangam Age, Export and Import during Sangam Age, Overseas Conquest of Cholas.',
+                  activities: 'Case studies on ancient trade routes, mapping of historical cities.'
+              },
+              {
+                  title: 'Contribution of Tamils to Indian National Movement and Indian Culture',
+                  topics: 'Contribution of Tamils to Indian Freedom Struggle, The Cultural Influence of Tamils over the other parts of India, Self-Respect Movement, Role of Siddha Medicine in Indigenous Systems of Medicine, Inscriptions & Manuscripts, Print History of Tamil Books.',
+                  activities: 'Research on freedom fighters, study of Siddha medicine principles.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Social Life of Tamils (Dr.K.K.Pillay)', link: 'https://www.amazon.in/Social-Life-Tamils-K-K-Pillay/dp/B0007J020S' },
+              { icon: '&#128218;', text: 'Historical Heritage of the Tamils', link: 'https://www.amazon.in/Historical-Heritage-Tamils-S-V-Subatamanian/dp/B0007J020S' },
+              { icon: '&#128203;', text: 'Keeladi - Sangam City Civilization (Archaeology Dept.)', link: 'https://www.tnarch.gov.in/english/excavations/keeladi.php' },
+              { icon: '&#128249;', text: 'Documentaries on Tamil History & Culture (YouTube)', link: 'https://www.youtube.com/results?search_query=tamil+heritage+documentary' }
+          ],
+          practicals: [
+              'Prepare presentations on specific aspects of Tamil heritage.',
+              'Analyze excerpts from classical Tamil literature.',
+              'Research and present on ancient Tamil technologies or art forms.',
+              'Participate in discussions on the social and economic life of ancient Tamils.'
+          ]
+      },
+      'EE25C04': {
+          name: 'Basic Electronics and Electrical Engineering',
+          type: 'Theory (T)',
+          periods: '2-1-0',
+          credits: '3',
+          category: 'Engineering Science (PC)',
+          objectives: [
+              'Students will understand the fundamentals and evolution of electronics, electrical systems.'
+          ],
+          chapters: [
+              {
+                  title: 'Basic Electronics',
+                  topics: 'Passive and active components – Resistors, Capacitors, Inductors - Types, features and specification, Energy band diagram of conductors, semiconductor, insulator – Intrinsic & extrinsic semiconductor - types. PN junction diode – zener diode.',
+                  activities: 'VI characteristics of PN junction and Zener diode.'
+              },
+              {
+                  title: 'Electrical Machines',
+                  topics: 'Construction, Principle of Operation, Basic Equations and Applications - DC Generators, DC Motors, Single Phase Transformer, Single phase Induction Motor, Three phase Induction Motor, Three phase Alternator, Stepper and BLDC motors.',
+                  activities: 'Demonstration of Electrical Machines.'
+              },
+              {
+                  title: 'Measurements and Instrumentation',
+                  topics: 'Functional elements of an instrument, Standards and calibration, Operating Principle, types - Moving Coil and Moving Iron meters, Measurement of three phase power, Energy Meter, Instrument Transformers - CT and PT, DSO - Block diagram - Data acquisition.',
+                  activities: 'Demonstration of measuring equipment’s.'
+              },
+              {
+                  title: 'Basics of Power Systems',
+                  topics: 'Power system structure - Generation, Transmission and distribution, Various voltage levels, Earthing – methods of earthing, protective devices - switch fuse unit - Miniature circuit breaker - moulded case circuit breaker - earth leakage circuit breaker, safety precautions and First Aid.',
+                  activities: 'Demonstration of Earthing and safety precautions in electrical circuits.'
+              },
+              {
+                  title: 'Sensors and Transducers',
+                  topics: 'Solenoids, electro-pneumatic systems, proximity sensors, limit switches, piezoelectric, hall effect, photo sensors, Strain gauge, LVDT, piezo electric crystals, differential pressure transducer, optical and digital transducers, Smart sensors, Thermal Imagers.',
+                  activities: 'Demonstration of various sensors and their applications.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Electronic devices and circuits (D. Bell)', link: 'https://www.amazon.com/Electronic-Devices-Circuits-David-Bell/dp/019542500X' },
+              { icon: '&#128218;', text: 'A textbook of electrical technology (B. L. Theraja)', link: 'https://www.amazon.in/Textbook-Electrical-Technology-Vol-1/dp/8121924405' },
+              { icon: '&#128203;', text: 'MIT OpenCourseWare - Electrical Engineering', link: 'https://ocw.mit.edu/courses/electrical-engineering-and-computer-science' },
+              { icon: '&#128203;', text: 'Khan Academy - Electrical Engineering', link: 'https://www.khanacademy.org/science/electrical-engineering' }
+          ],
+          practicals: [
+              'Perform VI characteristics of PN junction and Zener diode.',
+              'Observe and understand the operation of different electrical machines.',
+              'Demonstrate the use of various measuring equipment like DSO, energy meter.',
+              'Practice earthing methods and safety precautions in electrical circuits.',
+              'Experiment with different types of sensors and transducers.'
+          ]
+      },
+      'PH25C01': {
+          name: 'Applied Physics - I',
+          type: 'LIT',
+          periods: '2-0-2',
+          credits: '3',
+          category: 'Basic Science (BS)',
+          objectives: [
+              'To impart knowledge and expose the essentials of physics in various engineering applications.'
+          ],
+          chapters: [
+              {
+                  title: 'Properties of Matter',
+                  topics: 'Elasticity, Cantilever – Young’s modulus (non-uniform bending), Girders: Bridges and buildings, Viscosity: Stokes method – Surface tension: drop weight method, Thermal expansion, Thermal stress, Bimetallic strips, Expansion joints.',
+                  activities: 'Virtual demonstration of thermal stress.'
+              },
+              {
+                  title: 'Oscillations',
+                  topics: 'Simple Harmonic motion, Torsional pendulum, Couple per unit twist, Damped and Forced Oscillation.',
+                  activities: 'Analysis of oscillatory systems.'
+              },
+              {
+                  title: 'Waves',
+                  topics: 'Waves on a stretched string, Energy and Power, standing waves, Ultrasonics, piezo-electric method, Acoustic grating, Electromagnetic waves: Maxwell equation, Production of EM waves by dipole antenna, Propagation of EM waves in free space, wave equation, Cell phone reception.',
+                  activities: 'Virtual demonstration of propagation of EM waves.'
+              },
+              {
+                  title: 'Quantum Mechanics',
+                  topics: 'Black body radiation, Photoelectric effect, de Broglie hypothesis - Schrodinger Wave equation, Particle in a box (infinite potential well, three-dimensional box), Barrier penetration and quantum tunnelling.',
+                  activities: 'Virtual demonstration of Scanning Transmission Electron Microscope.'
+              },
+              {
+                  title: 'Applied Optics',
+                  topics: 'Interference: Air wedge, Michelson’s Interferometer, Fiber optics: Structure of a fiber – Fiber Optic Communication System – Fiber Sensors (Virtual demo) – Displacement, pressure sensor and Temperature sensor - Einstein Co-efficient - Nd:YAG laser, CO2 laser (construction, functioning and applications), dye laser.',
+                  activities: 'Demonstration of sensors and applications of Lasers.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'University physics with modern physics (Young & Freedman)', link: 'https://www.amazon.com/University-Physics-Modern-Freedman-Hugh/dp/0135159559' },
+              { icon: '&#128203;', text: 'NPTEL: Barrier penetration and Quantum tunnelling', link: 'https://archive.nptel.ac.in/courses/115/104/115104096/' },
+              { icon: '&#128203;', text: 'NPTEL: EM waves and wireless channelling', link: 'https://onlinecourses.nptel.ac.in/noc24_ee31/preview' },
+              { icon: '&#128249;', text: 'Bimetallic Strips (YouTube)', link: 'https://www.youtube.com/watch?v=WZQ8lvxdzDk' },
+              { icon: '&#128249;', text: 'Scanning Tunnelling Electron Microscope (YouTube)', link: 'https://www.youtube.com/watch?v=XNYZYbXNWQA' }
+          ],
+          practicals: [
+              'Determine Young’s modulus of the material using non-uniform bending.',
+              'Measure Rigidity modulus of the wire and moment of inertia of the disc using Torsional pendulum.',
+              'Perform Melde’s string experiment to find frequency of an electrically vibrating metal tip.',
+              'Determine Planck’s constant using Photo-electric effect.',
+              'Measure Ruling width of Compact disc using Laser.',
+              'Determine Thickness of a thin sheet/wire using Air wedge Method.'
+          ]
+      },
+      'CY25C01': {
+          name: 'Applied Chemistry - I',
+          type: 'LIT',
+          periods: '2-0-2',
+          credits: '3',
+          category: 'Basic Science (BS)',
+          objectives: [
+              'To provide students with a solid understanding of the chemical principles for engineering applications.',
+              'To introduce the chemical properties of materials and how these properties influence the selection and use of materials in engineering systems.',
+              'To impart practical applications of chemistry in commonly used engineering devices.'
+          ],
+          chapters: [
+              {
+                  title: 'Water Technology',
+                  topics: 'Water quality parameters and standards. Industrial feed water – Remediation. Municipal water treatment. Desalination.',
+                  activities: 'Coagulation of water sample using Alum.'
+              },
+              {
+                  title: 'Nano-chemistry',
+                  topics: 'Classification, Size-dependent properties. Preparation of nanomaterials – Top-down and Botton-Up approaches, Applications (Flipped classroom).',
+                  activities: 'Preparation of nanoparticles by Sol-Gel method.'
+              },
+              {
+                  title: 'Electrochemistry',
+                  topics: 'Electrochemical cell - Electrode potential - Redox reaction. Conductivity of electrolytes – Factors.',
+                  activities: 'Electrochemical cell demonstration.'
+              },
+              {
+                  title: 'Corrosion & Control',
+                  topics: 'Chemical and electrochemical corrosions, galvanic series, factors influencing corrosion, Electrochemical protection. Organic and Inorganic coating.',
+                  activities: 'Case Study on Corrosion in Pipelines and Electronics, Control measures for a corroded metal.'
+              },
+              {
+                  title: 'Batteries',
+                  topics: 'Conventional, Contemporary and Emerging battery storage technologies, Primary & Secondary Batteries, Battery Pack, Battery Materials, Performance Parameters, Testing, Safety aspects.',
+                  activities: 'Demonstration of battery pack in e-vehicles.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Engineering Chemistry (P. C. Jain & M. Jain)', link: 'https://www.amazon.in/Engineering-Chemistry-P-C-Jain/dp/8121924537' },
+              { icon: '&#128203;', text: 'NPTEL: Water and Wastewater Engineering', link: 'https://nptel.ac.in/courses/105106202' },
+              { icon: '&#128203;', text: 'NPTEL: Electrochemical Energy Systems', link: 'https://nptel.ac.in/courses/113106028' },
+              { icon: '&#128203;', text: 'Battery University (Resource on all battery types)', link: 'https://batteryuniversity.com/articles' }
+          ],
+          practicals: [
+              'Analysis of alkalinity, hardness and dissolved oxygen in water.',
+              'Preparation of nanoparticles by Sol-Gel method.',
+              'Perform Conductometric titrations.',
+              'Study corrosion by weight loss and salt spray method.',
+              'Measure EMF, Internal Resistance, Charge and Discharge Characteristics of batteries.'
+          ]
+      },
+      'CS25C01': {
+          name: 'Computer Programming: C',
+          type: 'LIT',
+          periods: '2-0-2',
+          credits: '3',
+          category: 'Engineering Science (G)',
+          objectives: [
+              'To equip engineering students with the foundational knowledge and practical skills in ‘C’ programming to analyse and solve computational problems effectively.',
+              'To foster problem-solving, critical thinking, and modular programming skills essential for engineering domains.'
+          ],
+          chapters: [
+              {
+                  title: 'Introduction to C',
+                  topics: 'Problem Solving, Problem Analysis Chart, Developing an Algorithm, Flowchart and Pseudocode, program structure, Compilation & Execution process, Interactive and Script mode, Comments, Indentation, Error messages, Primitive data types, Constants, Variables, Reserved words, Arithmetic, Relational, Logical, Bitwise, Assignment, Conditional operators, Input/Output Functions, Built-in Functions.',
+                  activities: 'Create Problem Analysis Charts, Flowcharts and Pseudocode for simple C programs (Minimum three).'
+              },
+              {
+                  title: 'Control Structures',
+                  topics: 'if, if-else, nested if, switch-case, while, do-while, for, nested loops, Jump statements.',
+                  activities: 'Usage of conditional logics in programs (Minimum three).'
+              },
+              {
+                  title: 'Functions',
+                  topics: 'Function Declaration, Definition and Calling, Function Parameters and Return Types, Call by Value and Call by Reference, Recursive Functions, Scope and Lifetime of Variables, Header files and Modular Programming.',
+                  activities: 'Usage of functions in programs (Minimum three).'
+              },
+              {
+                  title: 'Strings & Pointers',
+                  topics: 'One-dimensional and Multi-dimensional Arrays, Array operations and traversals, String Handling: String declaration, input/output, string library functions, Pointer arithmetic, Pointers and Arrays, Pointers to function, Dynamic memory allocation.',
+                  activities: 'Programs using pointers, dynamic memory, pointer arithmetic, string manipulations, array operations (Minimum three).'
+              },
+              {
+                  title: 'Structures & Unions',
+                  topics: 'Defining and using structures, Array of structures, Pointers to structures, Unions and their uses, Enumerations.',
+                  activities: 'Program to use structures and unions.'
+              },
+              {
+                  title: 'File Operations',
+                  topics: 'Open, read, write, close file operations, Binary vs Text files, File pointers, Error handling in file operations.',
+                  activities: 'Programs reading/writing data in text and binary files (Minimum three).'
+              },
+              {
+                  title: 'Standard Libraries & Header Files',
+                  topics: 'Using standard libraries like stdio.h, stdlib.h, string.h, math.h, Creating and using user-defined header files and libraries.',
+                  activities: 'Use of standard and user-defined libraries in solving problems (Minimum three), Project (Minimum Two).'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Programming in C (R. Thareja)', link: 'https://www.amazon.in/Programming-C-Reema-Thareja/dp/0198067712' },
+              { icon: '&#128203;', text: 'Learn-C.org', link: 'https://www.learn-c.org/' },
+              { icon: '&#128203;', text: 'GeeksforGeeks - C Programming', link: 'https://www.geeksforgeeks.org/c-programming-language/' },
+              { icon: '&#128203;', text: 'Swayam MOOC Course: Introduction to C Programming', link: 'https://onlinecourses.swayam2.ac.in/imb25_mg71/' }
+          ],
+          practicals: [
+              'Develop programs using conditional statements and loops.',
+              'Implement functions with different parameter passing mechanisms.',
+              'Work with arrays, strings, and pointers for data manipulation.',
+              'Create and use structures and unions.',
+              'Perform file input/output operations.',
+              'Develop small projects utilizing standard and user-defined libraries.'
+          ]
+      },
+      'ME25C04': {
+          name: 'Maker space',
+          type: 'Laboratory (L)',
+          periods: '0-0-4',
+          credits: '2',
+          category: 'Skill Development (SD)',
+          objectives: [
+              'To impart practical skills in the assembly, disassembly, and welding of components using appropriate tools and techniques.',
+              'To provide hands-on training in electrical wiring practices, and the use of electronic components, sensors, and actuators.'
+          ],
+          chapters: [
+              {
+                  title: 'Dis-assembly & Assembly Practices',
+                  topics: 'Tools and its handling techniques. Dis-assembly and assembly of home appliances – Grinder Mixer Grinder, Ceiling Fan, Table Fan & Washing Machine. Dis-assembly and assembly of Air-Conditioners & Refrigerators. Dis-assembly and assembly of a Bicycle.',
+                  activities: 'Hands-on disassembly and assembly of various appliances.'
+              },
+              {
+                  title: 'Welding Practices',
+                  topics: 'Welding Procedure, Selection & Safety Measures. Power source of Arc Welding – Gas Metal Arc Welding & Gas Tungsten Arc Welding processes. Hands-on session of preparing base material & Joint groove for welding. Hands-on session of MAW, GMAW, GTAW, on Carbon Steel & Stainless Stell plates / pipes, for fabrication of a simple part.',
+                  activities: 'Practical welding sessions.'
+              },
+              {
+                  title: 'Electrical Wiring Practices',
+                  topics: 'Electrical Installation tools, equipment & safety measures. Hands-on session of basic electrical connections for Fuses, Miniature Circuit Breakers and Distribution Box. Hands-on session of electrical connections for Lightings, Fans, Calling Bells. Hands-on session of electrical connections for Motors & Uninterruptible Power Supply.',
+                  activities: 'Practical electrical wiring exercises.'
+              },
+              {
+                  title: 'Electronics Components / Equipment Practices',
+                  topics: 'Electronic components, equipment & safety measures. Dis-assembly and assembly of Computers. Hands-on session of Soldering Practices in a Printed Circuit Board. Hands-on session of Bridge Rectifier, Op-Amp and Transimpedance amplifier. Hands-on session of integration of sensors and actuators with a Microcontroller. Demonstration of Programmable Logic Control Circuit.',
+                  activities: 'Soldering, circuit assembly, microcontroller interfacing.'
+              },
+              {
+                  title: 'Contemporary Systems',
+                  topics: 'Demonstration of Solid Modelling of components. Demonstration of Assembly Modelling of components. Fabrication of simple components / parts using 3D Printers. Demonstration of cutting of wood / metal in different complex shapes using Laser Cutting Machine.',
+                  activities: '3D printing, laser cutting demonstrations.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Learn to Weld: Beginning MIG Welding (Stephen Christena)', link: 'https://www.amazon.com/Learn-Weld-Beginning-Welding-Fabrication/dp/076034642X' },
+              { icon: '&#128218;', text: 'Fabricated - The New World of 3D Printing (H. Lipson)', link: 'https://www.amazon.com/Fabricated-New-World-3D-Printing/dp/1118350630' },
+              { icon: '&#128203;', text: 'GrabCAD (3D Models)', link: 'https://grabcad.com/' },
+              { icon: '&#128187;', text: 'Arduino Cookbook (M. Margolis)', link: 'https://www.amazon.com/Arduino-Cookbook-Recipes-Expand-Enhance/dp/1492097229' }
+          ],
+          practicals: [
+              'Perform disassembly and assembly of common household appliances.',
+              'Practice various welding techniques (MAW, GMAW, GTAW).',
+              'Execute basic electrical wiring installations for lights, fans, and motors.',
+              'Conduct soldering practices on PCBs and assemble basic electronic circuits.',
+              'Integrate sensors and actuators with a microcontroller.',
+              'Fabricate simple components using 3D printers.'
+          ]
+      },
+      'UC25A01': {
+          name: 'Life Skills for Engineers – I*',
+          type: '---',
+          periods: '1-0-2',
+          credits: '---', // Audit Course, no credits
+          category: 'Humanities (HUM)',
+          objectives: [
+              'To equip engineering students with essential life skills encompassing personal and emotional development, effective management of time and stress, financial literacy, digital safety, and civic responsibility.',
+              'To enhance self-awareness, interpersonal skills, and resilience to prepare students for the professional and personal challenges of engineering careers and life beyond academics.'
+          ],
+          chapters: [
+              {
+                  title: 'Personal and Emotional Development',
+                  topics: 'Self-Awareness & Personality, Emotional Intelligence & Empathy, Positive thinking, Right attitude, Stress & Anger Management, Goal-Setting & Time Management, Growth Mindset & Resilience.',
+                  activities: 'Personality tests (MBTI, DISC), reflection journals, Empathy circle, role-playing difficult conversations, Guided mindfulness sessions, stress relief toolkit creation, Vision board creation, weekly time audit and planner, Group challenge scenarios, resilience journal.'
+              },
+              {
+                  title: 'Management Skills',
+                  topics: 'Financial Literacy: Budgeting & Saving, Nutrition, Health, and Hygiene, Digital Literacy & Online Safety, Civic Responsibility & Ethics.',
+                  activities: 'Create a monthly budget, financial simulation game, Meal planning workshop, physical wellness challenge, Social media audit, privacy and safety scenarios, Community service, values debate.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'You can win (Shiv Khera)', link: 'https://www.amazon.in/You-Can-Win-Shiv-Khera/dp/812079102X' },
+              { icon: '&#128218;', text: 'Life skills 101: A practical guide (H. Levesque)', link: 'https://www.amazon.com/Life-Skills-101-Practical-Leaving/dp/150720000X' },
+              { icon: '&#128218;', text: 'Personality development & soft skills (B. K. Mitra)', link: 'https://www.amazon.in/Personality-Development-Soft-Skills-Mitra/dp/019809302X' }
+          ],
+          practicals: [
+              'Participate in personality assessment and self-reflection exercises.',
+              'Engage in activities to develop emotional intelligence and empathy.',
+              'Practice stress and anger management techniques.',
+              'Develop personal goal-setting and time management plans.',
+              'Create a personal budget and participate in financial simulations.',
+              'Discuss and apply principles of digital literacy and online safety.',
+              'Engage in community service or ethical dilemma discussions.'
+          ]
+      },
+      'UC25A02': {
+          name: 'Physical Education – I*',
+          type: '---',
+          periods: '0-0-4',
+          credits: '1',
+          category: 'Humanities (HUM)',
+          objectives: [
+              'To impart the fundamentals of physical education for development of students’ physical, mental, and social well-being.',
+              'To instill a lifelong appreciation for physical activity towards the development of positive attitude and fostering values of team work and sportsmanship.'
+          ],
+          chapters: [
+              {
+                  title: 'Introduction to physical education',
+                  topics: 'Exercise for Good Posture – Conditioning and Calisthenics for Before start, Jogging, Bending, Twisting, Standing, Sitting and Relaxation, Training on First Aid practices.',
+                  activities: 'Warm-up exercises, basic calisthenics, first aid training.'
+              },
+              {
+                  title: 'Participation of athletic events',
+                  topics: 'Rules and regulations of important athletic events, Sprint, Jumps, Throws and Hurdles.',
+                  activities: 'Practice of sprint, jumps, throws, and hurdles.'
+              },
+              {
+                  title: 'Skill development in any one of the following outdoor games',
+                  topics: 'Basket Ball, Volley Ball, Ball Badminton, Football, Hockey, Kho-Kho, Kabaddi, Cricket, Hand ball and Tennis.',
+                  activities: 'Hands-on practice and skill development in chosen outdoor game.'
+              },
+              {
+                  title: 'Skill development in any one of the following indoor games',
+                  topics: 'Shuttle Badminton, Chess and Table Tennis.',
+                  activities: 'Hands-on practice and skill development in chosen indoor game.'
+              }
+          ],
+          resources: [
+              { icon: '&#128218;', text: 'Essentials of physical education (A. Singh)', link: 'https://www.amazon.in/Essentials-Physical-Education-A-Singh/dp/812724900X' },
+              { icon: '&#128203;', text: 'WHO: Physical Activity Guidelines', link: 'https://www.who.int/health-topics/physical-activity' }
+          ],
+          practicals: [
+              'Engage in regular physical conditioning and calisthenics.',
+              'Learn and practice basic first aid procedures.',
+              'Participate in athletic events like sprints, jumps, and throws.',
+              'Develop skills in a chosen outdoor team sport (e.g., Basketball, Football).',
+              'Develop skills in a chosen indoor game (e.g., Badminton, Chess).'
+          ]
+      }
+    };
+
+    // Function to show subject details
+    function showSubjectDetail(subjectCode) {
+      const subjectDetailView = document.getElementById("subject-detail-view");
+      const subject = subjectData[subjectCode];
+
+      if (!subject) {
+        subjectDetailView.innerHTML = `<h3>Subject Not Found</h3><p>Details for ${subjectCode} are not available yet.</p>`;
+        subjectDetailView.style.display = "block";
+        return;
+      }
+
+      let chaptersHtml = "";
+      if (subject.chapters && subject.chapters.length > 0) {
+        subject.chapters.forEach((chapter) => {
+          chaptersHtml += `
+                        <li onclick="toggleChapter(this)">
+                            ${chapter.title}
+                            <span class="arrow">></span>
+                            <div class="chapter-content">
+                                <p><strong>Topics:</strong> ${chapter.topics}</p>
+                                <p><strong>Activities:</strong> ${chapter.activities}</p>
+                            </div>
+                        </li>
+                    `;
+        });
+      } else {
+        chaptersHtml = "<li>No detailed chapter information available yet.</li>";
+      }
+
+      let resourcesHtml = "";
+      if (subject.resources && subject.resources.length > 0) {
+        subject.resources.forEach((resource) => {
+          resourcesHtml += `<li><span class="icon">${resource.icon}</span> <a href="${resource.link}" target="_blank">${resource.text}</a></li>`;
+        });
+      } else {
+        resourcesHtml = "<li>No specific resources available yet.</li>";
+      }
+
+      let practicalsHtml = "";
+      if (subject.practicals && subject.practicals.length > 0) {
+        subject.practicals.forEach((practical) => {
+          practicalsHtml += `<li><span class="icon">&#128295;</span> ${practical}</li>`;
+        });
+      } else {
+        practicalsHtml = "<li>No specific lab practicals available yet.</li>";
+      }
+
+      subjectDetailView.innerHTML = `
+                <h2>${subject.name} (${subjectCode})</h2>
+                <p><strong>Course Type:</strong> ${subject.type}</p>
+                <p><strong>Periods / Week (L-T-P):</strong> ${subject.periods}</p>
+                <p><strong>Credits:</strong> ${subject.credits}</p>
+                <p><strong>Category:</strong> ${subject.category}</p>
+                <h3>Course Objectives:</h3>
+                <ul>
+                    ${subject.objectives.map((obj) => `<li>${obj}</li>`).join("")}
+                </ul>
+                <h3>Syllabus & Chapters:</h3>
+                <div class="chapter-list">
+                    <ul>
+                        ${chaptersHtml}
+                    </ul>
+                </div>
+                <h3>Chapter Resources (E-books, Papers, Videos):</h3>
+                <div class="resources">
+                    <ul>
+                        ${resourcesHtml}
+                    </ul>
+                </div>
+                <h3>Lab Practicals / Activities:</h3>
+                <div class="practicals">
+                    <ul>
+                        ${practicalsHtml}
+                    </ul>
+                </div>
+            `;
+      subjectDetailView.style.display = "block";
+      subjectDetailView.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Function to toggle chapter content within subject details
+    function toggleChapter(element) {
+      const content = element.querySelector(".chapter-content");
+      const arrow = element.querySelector(".arrow");
+      if (content.style.display === "block") {
+        content.style.display = "none";
+        element.classList.remove("active");
+      } else {
+        content.style.display = "block";
+        element.classList.add("active");
+      }
+    }
+  </script>
+</body>
+</html>
